@@ -8,6 +8,7 @@ from typing import List, Optional, Tuple, Union
 import ray
 import torch
 
+from openrlhf.datasets.utils import zero_pad_sequences
 from openrlhf.models.utils import compute_approx_kl, compute_reward, masked_mean, process_sequences
 from openrlhf.trainer.ray.launcher import PPORayActorGroup
 from openrlhf.utils.logging_utils import init_logger
@@ -520,8 +521,8 @@ class RemoteExperienceMaker(ABC):
                 all_advantages.append(exp.advantages)
                 all_action_masks.append(exp.action_mask)
 
-            advantages_vector = torch.cat(all_advantages).float().flatten()
-            action_masks_vector = torch.cat(all_action_masks).flatten()
+            advantages_vector = zero_pad_sequences(all_advantages).float().flatten()
+            action_masks_vector = zero_pad_sequences(all_action_masks).flatten()
             num_actions = action_masks_vector.sum()
 
             # mean
@@ -621,7 +622,7 @@ class RemoteExperienceMaker(ABC):
         return returns
 
     @torch.no_grad()
-    def generate_samples(self, all_prompts: List[str], all_labels, **generate_kwargs) -> Samples:
+    def generate_samples(self, all_prompts: List[str], all_labels, **generate_kwargs) -> List[Samples]:
         """
         Generate samples and return in batches.
 
