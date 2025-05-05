@@ -1,4 +1,4 @@
-set -x
+#set -x
 
 read -r -d '' training_commands <<EOF
 openrlhf.cli.train_dpo \
@@ -31,7 +31,8 @@ EOF
     # --packing_samples
     # --nll_loss_coef (Regularization with NLL loss)
 
+echo deepspeed --module $training_commands
 
-if [[ ${1} != "slurm" ]]; then
-    deepspeed --module $training_commands
-fi
+#if [[ ${1} != "slurm" ]]; then
+#    deepspeed --module $training_commands
+#fi
