@@ -173,14 +173,14 @@ class SFTDataset(Dataset):
     def __getitem__(self, idx):
         prompt = self.prompts[idx]
         response = self.responses[idx]
-
+        
         if not self.pretrain_mode:
             text = (prompt + response).rstrip("\n")
             if not text.endswith(self.tokenizer.eos_token):
                 text += " " + self.tokenizer.eos_token
         else:
             text = prompt
-
+        
         input_token = self.tokenizer(
             text,
             max_length=self.max_length,

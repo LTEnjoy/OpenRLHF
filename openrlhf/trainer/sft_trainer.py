@@ -153,7 +153,7 @@ class SFTTrainer(ABC):
                 loss = gpt_loss + aux_loss * self.args.aux_loss_coef
                 self.strategy.backward(loss, self.model, self.optimizer)
                 self.strategy.optimizer_step(self.optimizer, self.model, self.scheduler)
-
+                
                 loss_sum += gpt_loss.item()
                 logs_dict = {
                     "gpt_loss": gpt_loss.item(),

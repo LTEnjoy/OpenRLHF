@@ -90,9 +90,10 @@ def log_probs_from_logits(logits: torch.Tensor, labels: torch.Tensor, temperatur
         last_dim = logits.shape[-1]
         try:
             from flash_attn.ops.triton.cross_entropy import cross_entropy_loss
-
+            
             output = cross_entropy_loss(logits.reshape(-1, last_dim), labels.reshape(-1))
             log_probs_labels = -output[0].view(*batch_dim)
+
         except ImportError:
             logits_labels = torch.gather(logits, dim=-1, index=labels.unsqueeze(-1)).squeeze(-1)
             logsumexp_values = _logsumexp_by_chunk(logits.reshape(-1, last_dim))
