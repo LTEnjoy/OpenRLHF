@@ -1,4 +1,5 @@
-deepspeed --module openrlhf.cli.train_rm \
+deepspeed --num_gpus 1 \
+   --module openrlhf.cli.train_rm \
    --save_path ./checkpoint/Qwen2.5-0.5B-Instruct \
    --save_steps -1 \
    --logging_steps 1 \
