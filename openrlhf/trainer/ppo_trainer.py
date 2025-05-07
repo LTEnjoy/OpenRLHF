@@ -170,6 +170,7 @@ class PPOTrainer(ABC):
 
             for _, rand_prompts, labels in self.prompts_dataloader:
                 experiences = self.experience_maker.make_experience_list(rand_prompts, labels, **self.generate_kwargs)
+                
                 sample0 = self.tokenizer.batch_decode(
                     experiences[0].sequences[0].unsqueeze(0), skip_special_tokens=True
                 )

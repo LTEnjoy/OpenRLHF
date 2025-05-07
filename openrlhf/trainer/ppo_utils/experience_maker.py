@@ -320,7 +320,7 @@ class RemoteExperienceMaker(ABC):
         if args.colocate_all_models and not self.remote_rm_url:
             ray.get(r_refs)
             ray.get(self.reward_model_group.async_run_method(method_name="empty_cache"))
-
+        
         # Batch call actor model
         action_log_probs_ref = self.actor_model_group.async_run_method_batch(
             method_name="forward",
@@ -376,10 +376,14 @@ class RemoteExperienceMaker(ABC):
         base_action_log_probs_list = sum(ray.get(base_action_log_probs_ref)[::duplicate_factor], [])
         value_list = sum(ray.get(value_ref)[::duplicate_factor], [])
         rewards_list = ray.get(r_refs)
+        
         if self.remote_rm_url is None:
             rewards_list = sum(rewards_list[::duplicate_factor], [])
         else:
             rewards_list = torch.cat(rewards_list, dim=0).chunk(len(samples_list))
+        
+        print(rewards_list)
+        raise
 
         assert (
             len(samples_list)
@@ -721,5 +725,5 @@ class RemoteExperienceMaker(ABC):
                 labels=batch_labels,
             )
             samples_list.append(rollout_samples)
-
+        
         return samples_list

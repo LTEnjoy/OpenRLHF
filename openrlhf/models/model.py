@@ -205,10 +205,12 @@ def _get_reward_model(base_pretrained_model, base_llm_model, value_head_prefix="
             last_hidden_states = outputs["last_hidden_state"]
 
             values = getattr(self, self.value_head_prefix)(last_hidden_states).squeeze(-1)
+            print("value:", values.shape)
 
             if self.packing_samples:
                 values = gather_and_pad_tensor(values, ring_attn_group, ring_attn_pad_len, indices, batch, seqlen)
             reward = values.gather(dim=1, index=eos_indices).squeeze(1)
+            print("reward:", reward.shape)
 
             if not self.training and self.normalize_reward:
                 reward = (reward - self.mean) / self.std

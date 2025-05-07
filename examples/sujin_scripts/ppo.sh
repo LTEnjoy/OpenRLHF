@@ -1,6 +1,6 @@
 # launch the master node of ray in container
-NUM_GPUS=4
-ray start --head --node-ip-address 0.0.0.0 --num-gpus $NUM_GPUS
+NUM_GPUS=1
+#ray start --head --node-ip-address 0.0.0.0 --num-gpus $NUM_GPUS
 
 ray job submit --address="http://127.0.0.1:8265" \
    --runtime-env-json='{"working_dir": "/sujin/PycharmProjects/OpenRLHF/run_env"}' \
@@ -23,8 +23,8 @@ ray job submit --address="http://127.0.0.1:8265" \
    --save_hf_ckpt \
    --micro_train_batch_size 1 \
    --train_batch_size 4 \
-   --micro_rollout_batch_size 4 \
-   --rollout_batch_size 256 \
+   --micro_rollout_batch_size 1 \
+   --rollout_batch_size 2 \
    --n_samples_per_prompt 1 \
    --max_epochs 1 \
    --prompt_max_len 256 \
