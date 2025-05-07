@@ -381,9 +381,6 @@ class RemoteExperienceMaker(ABC):
             rewards_list = sum(rewards_list[::duplicate_factor], [])
         else:
             rewards_list = torch.cat(rewards_list, dim=0).chunk(len(samples_list))
-        
-        print(rewards_list)
-        raise
 
         assert (
             len(samples_list)
