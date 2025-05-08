@@ -406,7 +406,7 @@ class RemoteExperienceMaker(ABC):
 
             sequences = samples.sequences
             attention_mask = samples.attention_mask
-
+            
             if not args.use_kl_loss:
                 base_action_log_probs = None
 
@@ -480,7 +480,7 @@ class RemoteExperienceMaker(ABC):
                 action_mask=experience.action_mask,
                 reward_clip_range=args.reward_clip_range,
             )
-
+            
             if self.advantage_estimator == "gae":
                 experience.advantages, experience.returns = self.get_advantages_and_returns(
                     experience.values,
